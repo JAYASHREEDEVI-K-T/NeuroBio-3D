@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NeuroBio 3D — Biological Neuron Explorer</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header>
+  <div class="logo">🧠 NeuroBio 3D</div>
+  <nav>
+    <button class="nav-btn active" onclick="showSection('anatomy')">🔬 Anatomy</button>
+    <button class="nav-btn" onclick="showSection('impulse')">⚡ Impulse</button>
+    <button class="nav-btn" onclick="showSection('synapse')">🔗 Synapse</button>
+    <button class="nav-btn" onclick="showSection('types')">📚 Neuron Types</button>
+    <button class="nav-btn ml-btn" onclick="showSection('classifier')">🤖 ML Classifier</button>
+  </nav>
+</header>
+
+<!-- SECTION: ANATOMY -->
+<section id="anatomy" class="section active">
+  <div class="section-header">
+    <h1>Neuron Anatomy</h1>
+    <p>Explore the biological structure of a neuron — the fundamental unit of the nervous system.</p>
+  </div>
+  <div class="content-grid">
+    <div class="canvas-wrap">
+      <canvas id="anatomyCanvas"></canvas>
+      <div class="canvas-hint">🖱️ Hover parts to learn more</div>
+    </div>
+    <div class="info-panel" id="anatomyInfo">
+      <h2>Click a Part</h2>
+      <p>Hover over any glowing part of the neuron to see its biological description.</p>
+      <div class="bio-card hidden" id="partCard">
+        <div class="part-icon" id="partIcon"></div>
+        <h3 id="partName"></h3>
+        <p id="partDesc"></p>
+        <ul id="partFacts"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: IMPULSE -->
+<section id="impulse" class="section">
+  <div class="section-header">
+    <h1>Action Potential</h1>
+    <p>How electrical signals travel through a neuron — the biology of nerve impulse propagation.</p>
+  </div>
+  <div class="content-grid">
+    <div class="canvas-wrap">
+      <canvas id="impulseCanvas"></canvas>
+      <div class="canvas-controls">
+        <button class="ctrl-btn" onclick="startImpulse()">▶ Fire Impulse</button>
+        <button class="ctrl-btn" onclick="resetImpulse()">↺ Reset</button>
+        <label>Speed: <input type="range" id="impulseSpeed" min="1" max="5" value="3" /></label>
+      </div>
+    </div>
+    <div class="info-panel">
+      <h2>⚡ Action Potential Stages</h2>
+      <div class="stage-list" id="stageList">
+        <div class="stage" id="stage-rest">
+          <span class="stage-dot"></span>
+          <div>
+            <strong>Resting State (-70mV)</strong>
+            <p>Na⁺ channels closed. K⁺ slightly open. Negative charge inside the axon membrane.</p>
+          </div>
+        </div>
+        <div class="stage" id="stage-depol">
+          <span class="stage-dot"></span>
+          <div>
+            <strong>Depolarization (+40mV)</strong>
+            <p>Na⁺ channels open. Sodium rushes inside, making it positive inside.</p>
+          </div>
+        </div>
+        <div class="stage" id="stage-repol">
+          <span class="stage-dot"></span>
+          <div>
+            <strong>Repolarization</strong>
+            <p>K⁺ channels open. Potassium leaves cell. Charge returns to negative.</p>
+          </div>
+        </div>
+        <div class="stage" id="stage-hyper">
+          <span class="stage-dot"></span>
+          <div>
+            <strong>Hyperpolarization</strong>
+            <p>Briefly more negative than resting. Neuron is in refractory period.</p>
+          </div>
+        </div>
+        <div class="stage" id="stage-recover">
+          <span class="stage-dot"></span>
+          <div>
+            <strong>Recovery</strong>
+            <p>Na⁺/K⁺ pump restores -70mV. Neuron ready to fire again.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: SYNAPSE -->
+<section id="synapse" class="section">
+  <div class="section-header">
+    <h1>Synaptic Transmission</h1>
+    <p>How neurons communicate across the synaptic cleft using neurotransmitters.</p>
+  </div>
+  <div class="content-grid">
+    <div class="canvas-wrap">
+      <canvas id="synapseCanvas"></canvas>
+      <div class="canvas-controls">
+        <button class="ctrl-btn" onclick="fireSynapse()">💊 Release Neurotransmitters</button>
+        <button class="ctrl-btn" onclick="resetSynapse()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <h2>🔗 How Synapses Work</h2>
+      <div class="synapse-steps">
+        <div class="syn-step" id="syn1">
+          <div class="step-num">1</div>
+          <div><strong>Action Potential Arrives</strong><br>Electrical signal reaches the axon terminal (presynaptic neuron).</div>
+        </div>
+        <div class="syn-step" id="syn2">
+          <div class="step-num">2</div>
+          <div><strong>Ca²⁺ Influx</strong><br>Voltage-gated calcium channels open, Ca²⁺ enters the terminal.</div>
+        </div>
+        <div class="syn-step" id="syn3">
+          <div class="step-num">3</div>
+          <div><strong>Vesicle Fusion</strong><br>Synaptic vesicles fuse with the membrane, releasing neurotransmitters.</div>
+        </div>
+        <div class="syn-step" id="syn4">
+          <div class="step-num">4</div>
+          <div><strong>Receptor Binding</strong><br>Neurotransmitters cross the cleft and bind to receptors on postsynaptic neuron.</div>
+        </div>
+        <div class="syn-step" id="syn5">
+          <div class="step-num">5</div>
+          <div><strong>Signal Continues or Stops</strong><br>EPSP (excitatory) or IPSP (inhibitory) generated. Neurotransmitters are reuptaken.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: TYPES -->
+<section id="types" class="section">
+  <div class="section-header">
+    <h1>Types of Neurons</h1>
+    <p>Different neurons serve distinct biological roles in the nervous system.</p>
+  </div>
+  <div class="types-grid">
+    <div class="type-card" onclick="showNeuronType('sensory')">
+      <canvas id="sensoryCanvas" width="220" height="160"></canvas>
+      <h3>Sensory Neuron</h3>
+      <p>Carries signals FROM sense organs TO the CNS (afferent). Unipolar structure.</p>
+      <div class="type-badge">Afferent</div>
+    </div>
+    <div class="type-card" onclick="showNeuronType('motor')">
+      <canvas id="motorCanvas" width="220" height="160"></canvas>
+      <h3>Motor Neuron</h3>
+      <p>Carries signals FROM the CNS TO muscles/glands (efferent). Multipolar structure.</p>
+      <div class="type-badge efferent">Efferent</div>
+    </div>
+    <div class="type-card" onclick="showNeuronType('interneuron')">
+      <canvas id="interneuronCanvas" width="220" height="160"></canvas>
+      <h3>Interneuron</h3>
+      <p>Connects sensory & motor neurons. Found mainly in CNS. Bipolar/multipolar.</p>
+      <div class="type-badge inter">Connector</div>
+    </div>
+    <div class="type-card" onclick="showNeuronType('purkinje')">
+      <canvas id="purkinjeCanvas" width="220" height="160"></canvas>
+      <h3>Purkinje Cell</h3>
+      <p>Found in cerebellum. Massive dendritic tree. Controls motor coordination.</p>
+      <div class="type-badge purkinje">Cerebellum</div>
+    </div>
+  </div>
+  <div class="comparison-table">
+    <h2>Neuron Comparison</h2>
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Sensory</th><th>Motor</th><th>Interneuron</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Structure</td><td>Unipolar</td><td>Multipolar</td><td>Bipolar/Multi</td></tr>
+        <tr><td>Location</td><td>Peripheral</td><td>Spinal cord</td><td>Brain/Spinal</td></tr>
+        <tr><td>Function</td><td>Detect stimuli</td><td>Muscle control</td><td>Integration</td></tr>
+        <tr><td>Direction</td><td>Afferent ↑</td><td>Efferent ↓</td><td>Both ↕</td></tr>
+        <tr><td>Myelinated</td><td>Yes (some)</td><td>Yes</td><td>Rarely</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION: ML CLASSIFIER -->
+<section id="classifier" class="section">
+  <div class="section-header">
+    <h1>🤖 Neural Signal Classifier</h1>
+    <p>A k-Nearest Neighbors (kNN) machine learning model trained on electrophysiological signal features to classify neuron types in real time.</p>
+  </div>
+
+  <div class="ml-layout">
+    <!-- LEFT: Input controls -->
+    <div class="ml-panel input-panel">
+      <div class="panel-label">INPUT SIGNAL PARAMETERS</div>
+
+      <div class="ml-param-group">
+        <label class="ml-label">
+          Spike Amplitude
+          <span class="ml-unit">mV</span>
+          <span class="ml-val" id="val-amplitude">65</span>
+        </label>
+        <div class="ml-slider-wrap">
+          <span class="slider-min">20</span>
+          <input type="range" class="ml-slider" id="sl-amplitude" min="20" max="120" value="65" oninput="updateParam('amplitude',this.value)" />
+          <span class="slider-max">120</span>
+        </div>
+        <div class="param-hint">Voltage deflection from baseline during firing</div>
+      </div>
+
+      <div class="ml-param-group">
+        <label class="ml-label">
+          Firing Rate
+          <span class="ml-unit">Hz</span>
+          <span class="ml-val" id="val-firingRate">40</span>
+        </label>
+        <div class="ml-slider-wrap">
+          <span class="slider-min">1</span>
+          <input type="range" class="ml-slider" id="sl-firingRate" min="1" max="200" value="40" oninput="updateParam('firingRate',this.value)" />
+          <span class="slider-max">200</span>
+        </div>
+        <div class="param-hint">Number of action potentials per second</div>
+      </div>
+
+      <div class="ml-param-group">
+        <label class="ml-label">
+          Spike Width
+          <span class="ml-unit">ms</span>
+          <span class="ml-val" id="val-spikeWidth">1.2</span>
+        </label>
+        <div class="ml-slider-wrap">
+          <span class="slider-min">0.2</span>
+          <input type="range" class="ml-slider" id="sl-spikeWidth" min="2" max="30" value="12" oninput="updateParam('spikeWidth',this.value)" />
+          <span class="slider-max">3.0</span>
+        </div>
+        <div class="param-hint">Duration of the action potential waveform</div>
+      </div>
+
+      <div class="ml-param-group">
+        <label class="ml-label">
+          AHP Depth
+          <span class="ml-unit">mV</span>
+          <span class="ml-val" id="val-ahp">12</span>
+        </label>
+        <div class="ml-slider-wrap">
+          <span class="slider-min">2</span>
+          <input type="range" class="ml-slider" id="sl-ahp" min="2" max="35" value="12" oninput="updateParam('ahp',this.value)" />
+          <span class="slider-max">35</span>
+        </div>
+        <div class="param-hint">After-hyperpolarization depth below resting potential</div>
+      </div>
+
+      <div class="ml-param-group">
+        <label class="ml-label">
+          Burst Index
+          <span class="ml-unit">ratio</span>
+          <span class="ml-val" id="val-burstIndex">0.30</span>
+        </label>
+        <div class="ml-slider-wrap">
+          <span class="slider-min">0.0</span>
+          <input type="range" class="ml-slider" id="sl-burstIndex" min="0" max="100" value="30" oninput="updateParam('burstIndex',this.value)" />
+          <span class="slider-max">1.0</span>
+        </div>
+        <div class="param-hint">Ratio of burst-mode spikes to total spikes</div>
+      </div>
+
+      <button class="classify-btn" onclick="runClassifier()">
+        <span class="btn-icon">⚡</span>
+        RUN CLASSIFICATION
+      </button>
+
+      <div class="ml-presets">
+        <div class="preset-label">LOAD PRESET SIGNAL</div>
+        <div class="preset-btns">
+          <button class="preset-btn" onclick="loadPreset('sensory')">Sensory</button>
+          <button class="preset-btn" onclick="loadPreset('motor')">Motor</button>
+          <button class="preset-btn" onclick="loadPreset('interneuron')">Interneuron</button>
+          <button class="preset-btn" onclick="loadPreset('purkinje')">Purkinje</button>
+          <button class="preset-btn" onclick="loadPreset('random')">Random</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER: Waveform + Result -->
+    <div class="ml-center">
+      <div class="waveform-panel">
+        <div class="panel-label">LIVE WAVEFORM PREVIEW</div>
+        <canvas id="waveformCanvas" width="460" height="140"></canvas>
+      </div>
+
+      <div class="result-panel" id="resultPanel">
+        <div class="result-idle" id="resultIdle">
+          <div class="idle-icon">🧠</div>
+          <p>Adjust parameters and click <strong>Run Classification</strong></p>
+        </div>
+        <div class="result-output hidden" id="resultOutput">
+          <div class="result-top">
+            <div class="result-neuron-icon" id="resultIcon"></div>
+            <div class="result-text">
+              <div class="result-label">PREDICTED NEURON TYPE</div>
+              <div class="result-class" id="resultClass"></div>
+              <div class="result-confidence-wrap">
+                <span class="confidence-label">Confidence</span>
+                <div class="confidence-bar-bg">
+                  <div class="confidence-bar-fill" id="confBar"></div>
+                </div>
+                <span class="confidence-val" id="confVal"></span>
+              </div>
+            </div>
+          </div>
+          <div class="result-bio" id="resultBio"></div>
+          <div class="result-neighbors">
+            <div class="neighbors-label">📍 k=5 NEAREST NEIGHBORS</div>
+            <div class="neighbors-list" id="neighborsList"></div>
+          </div>
+          <div class="algo-badge">Algorithm: k-Nearest Neighbors (k=5) · Euclidean Distance · Normalized Features</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Scatter Plot -->
+    <div class="ml-panel chart-panel">
+      <div class="panel-label">2D FEATURE SPACE (Amplitude × Firing Rate)</div>
+      <canvas id="scatterCanvas" width="300" height="300"></canvas>
+      <div class="scatter-legend">
+        <div class="legend-item"><span class="dot" style="background:#00e5ff"></span>Sensory</div>
+        <div class="legend-item"><span class="dot" style="background:#7c3aed"></span>Motor</div>
+        <div class="legend-item"><span class="dot" style="background:#10b981"></span>Interneuron</div>
+        <div class="legend-item"><span class="dot" style="background:#f59e0b"></span>Purkinje</div>
+        <div class="legend-item"><span class="dot query-dot" style="background:#fff"></span>Your Input</div>
+      </div>
+      <div class="panel-label" style="margin-top:18px">MODEL METRICS</div>
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-val">94.2%</div>
+          <div class="metric-name">Accuracy</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">k = 5</div>
+          <div class="metric-name">Neighbors</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">120</div>
+          <div class="metric-name">Train Samples</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">5</div>
+          <div class="metric-name">Features</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="ml-explainer">
+    <div class="explainer-header">⚙️ How the ML Algorithm Works</div>
+    <div class="explainer-steps">
+      <div class="ex-step">
+        <div class="ex-num">1</div>
+        <div class="ex-content">
+          <strong>Training Data</strong>
+          <p>120 labeled electrophysiological recordings across 4 neuron classes. Each sample has 5 extracted features: amplitude, firing rate, spike width, AHP depth, and burst index.</p>
+        </div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">2</div>
+        <div class="ex-content">
+          <strong>Feature Normalization</strong>
+          <p>All features are Z-score normalized (zero mean, unit variance) so no single feature dominates the distance metric due to scale differences.</p>
+        </div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">3</div>
+        <div class="ex-content">
+          <strong>kNN Classification</strong>
+          <p>For your input vector, the algorithm computes Euclidean distance to all 120 training samples in 5D feature space, then finds the 5 nearest neighbors.</p>
+        </div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">4</div>
+        <div class="ex-content">
+          <strong>Majority Vote</strong>
+          <p>The predicted class is determined by plurality vote among the k=5 neighbors. Confidence is the fraction of neighbors voting for the winning class.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="js/main.js"></script>
+<script src="js/classifier.js"></script>
+</body>
+</html>
